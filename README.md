@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.png" alt="Bússola Política, sistema especialista" width="300"></p>
+
 # Bússola Política · Expert SINTA
 
 Sistema especialista de pergunta e resposta que classifica o posicionamento político do usuário. Trabalho da disciplina de Inteligência Artificial (ferramenta Expert SINTA 1.1b, LIA/UFC).
@@ -24,6 +26,10 @@ Sistema especialista de pergunta e resposta que classifica o posicionamento pol�
 ## Como abrir no Expert SINTA
 
 Abra o `ExSINTA.exe` (Windows, ou Wine no Mac/Linux), menu Arquivo / Abrir base, e escolha `BUSSOLA_POLITICA.BCM`. O botão de play inicia a consulta.
+
+## Identidade visual (`assets/`)
+
+`logo.png` e `icone.png` têm fundo transparente; `icone-fundo-branco.png` serve para fundos escuros.
 
 ## Código-fonte (`src/`)
 
