@@ -15,18 +15,24 @@ Classificação do posicionamento político-ideológico de uma pessoa a partir
 de suas opiniões declaradas.
 
 O conhecimento modelado vem da forma usual de descrever posições políticas
-em dois eixos independentes, em vez de uma única linha esquerda-direita:
+em dois eixos independentes, em vez de uma única linha esquerda-direita.
+Cada eixo é formado por dois temas, e cada tema por duas perguntas:
 
-  - Eixo econômico: quanto o Estado deve atuar na economia e qual o tamanho
-    desejado da carga de impostos e dos serviços públicos.
-    Valores: Esquerda, Centro, Direita.
+  - Eixo econômico (Esquerda, Centro, Direita)
+      tema "intervenção estatal": papel do Estado na economia e destino das
+                                  empresas estatais
+      tema "redistribuição de renda": impostos e serviços públicos e
+                                  programas de transferência de renda
 
-  - Eixo de costumes: como a sociedade deve reagir a mudanças de valores e
-    qual a prioridade no combate à criminalidade.
-    Valores: Progressista, Moderado, Conservador.
+  - Eixo de costumes (Progressista, Moderado, Conservador)
+      tema "valores sociais": mudanças nos costumes e influência da religião
+                              sobre as leis
+      tema "lei e ordem":     prioridade no combate à criminalidade e
+                              política de drogas
 
 Um terceiro aspecto, tratado à parte, é a relação com as instituições
-democráticas (freios e contrapesos e liberdade de imprensa).
+democráticas (freios e contrapesos, liberdade de imprensa e cumprimento de
+decisões da Justiça).
 
 O sistema tem finalidade didática. A classificação é simplificada e não
 representa juízo de valor sobre nenhuma posição.
@@ -43,21 +49,33 @@ O sistema possui duas variáveis-objetivo:
   b) perfil institucional
      Democrático | Ambivalente | Autoritário
 
-Para chegar a elas, o sistema faz seis perguntas ao usuário e encadeia as
-regras para trás (do objetivo para as perguntas).
+Para chegar a elas, o sistema faz onze perguntas ao usuário e encadeia as
+regras para trás (do objetivo para as perguntas). Todas as onze perguntas
+são sempre feitas, qualquer que seja o caminho das respostas.
 
 
-3. ESTRUTURA DAS VARIÁVEIS (10 variáveis, todas univaloradas)
+3. ESTRUTURA DAS VARIÁVEIS (19 variáveis, todas univaloradas)
 
-  Variáveis perguntadas ao usuário (6):
+  Variáveis perguntadas ao usuário (11):
     papel do Estado ............ 3 alternativas
+    empresas estatais .......... 3 alternativas
     impostos e serviços ........ 3 alternativas
-    valores e costumes ......... 3 alternativas
+    programas sociais .......... 3 alternativas
+    mudanças nos costumes ...... 3 alternativas
+    religião e leis ............ 3 alternativas
     segurança pública .......... 3 alternativas
+    política de drogas ......... 3 alternativas
     aceita líder sem freios .... Sim / Não
     defende imprensa livre ..... Sim / Não
+    cumpre decisões da Justiça . Sim / Não
 
-  Variáveis intermediárias, deduzidas pelas regras (2):
+  Variáveis intermediárias de tema (4):
+    intervenção estatal ........ Alta, Moderada, Baixa
+    redistribuição de renda .... Ampla, Moderada, Restrita
+    valores sociais ............ Liberais, Moderados, Tradicionais
+    lei e ordem ................ Garantista, Equilibrada, Punitivista
+
+  Variáveis intermediárias de eixo (2):
     eixo econômico ............. Esquerda, Centro, Direita
     eixo de costumes ........... Progressista, Moderado, Conservador
 
@@ -66,37 +84,58 @@ regras para trás (do objetivo para as perguntas).
     perfil institucional
 
 
-4. REGRAS (23 regras)
+4. REGRAS (59 regras)
 
-  Regras  1 a  5: deduzem o eixo econômico a partir de "papel do Estado" e
-                  "impostos e serviços".
-  Regras  6 a 10: deduzem o eixo de costumes a partir de "valores e
-                  costumes" e "segurança pública".
-  Regras 11 a 19: combinam os dois eixos (3 x 3) e concluem a posição
-                  política.
-  Regras 20 a 23: concluem o perfil institucional a partir das duas
-                  perguntas de Sim / Não.
+  Regras  1 a  7: intervenção estatal    (papel do Estado + empresas estatais)
+  Regras  8 a 14: redistribuição de renda (impostos e serviços + programas sociais)
+  Regras 15 a 21: eixo econômico          (intervenção estatal + redistribuição)
+  Regras 22 a 28: valores sociais         (mudanças nos costumes + religião e leis)
+  Regras 29 a 35: lei e ordem             (segurança pública + política de drogas)
+  Regras 36 a 42: eixo de costumes        (valores sociais + lei e ordem)
+  Regras 43 a 51: posição política        (eixo econômico x eixo de costumes, 3 x 3)
+  Regras 52 a 59: perfil institucional    (as 8 combinações das três perguntas
+                                           de Sim / Não)
 
-  Toda combinação possível de respostas leva a uma conclusão: as 5 regras de
-  cada eixo cobrem as 9 combinações das duas perguntas, e as 9 regras de
-  posição cobrem as 9 combinações dos eixos.
+  Cada bloco de 7 regras combina duas variáveis de três valores e cobre as
+  9 combinações possíveis, de modo que toda consulta chega a uma conclusão.
+  No perfil institucional, três respostas democráticas concluem
+  "Democrático", nenhuma conclui "Autoritário" e os demais casos concluem
+  "Ambivalente".
 
-  Fatores de confiança: quando as duas respostas de um eixo apontam para
-  lados opostos (por exemplo, Estado condutor da economia com menos
-  impostos), o sistema conclui o valor central do eixo com CNF 80%. As
-  demais regras concluem com CNF 100%. O fator de confiança final da posição
-  política é o menor entre os dois eixos.
+  Fatores de confiança: quando as duas respostas de um tema apontam para
+  polos opostos, o tema recebe o valor central com CNF 90%. Quando os dois
+  temas de um eixo apontam para polos opostos, o eixo recebe o valor central
+  com CNF 80%. As demais regras concluem com CNF 100%. Ao encadear as
+  regras, o Expert SINTA multiplica os fatores de confiança das premissas
+  pelo da regra.
 
 
-5. EXEMPLO DE CONSULTA
+5. EXEMPLOS DE CONSULTA (conferidos no Expert SINTA 1.1b)
 
-  papel do Estado     = Conduzir a economia e manter empresas estatais
-  impostos e serviços = Menos impostos e menos serviços públicos
-      -> Regra 4: eixo econômico = Centro (CNF 80%)
-  valores e costumes  = Acolher as mudanças e ampliar direitos
-  segurança pública   = Prevenção e políticas sociais
-      -> Regra 6: eixo de costumes = Progressista (CNF 100%)
-      -> Regra 14: posição política = Centro-esquerda (CNF 80%)
-  aceita líder sem freios = Não
-  defende imprensa livre  = Sim
-      -> Regra 20: perfil institucional = Democrático (CNF 100%)
+  Exemplo A
+    papel do Estado       = Regular o mercado e corrigir desigualdades
+    empresas estatais     = Manter e fortalecer as estatais
+        -> Regra 2: intervenção estatal = Alta (CNF 100%)
+    impostos e serviços   = Menos impostos e menos serviços públicos
+    programas sociais     = Reduzir os programas
+        -> Regra 10: redistribuição de renda = Restrita (CNF 100%)
+        -> Regra 20: eixo econômico = Centro (CNF 80%)
+    mudanças nos costumes = Acolher as mudanças e ampliar direitos
+    religião e leis       = Alguma, como um dos valores da sociedade
+        -> Regra 22: valores sociais = Liberais (CNF 100%)
+    segurança pública     = Penas mais duras e mais policiamento
+    política de drogas    = Manter a legislação atual
+        -> Regra 31: lei e ordem = Punitivista (CNF 100%)
+        -> Regra 41: eixo de costumes = Moderado (CNF 80%)
+        -> Regra 47: posição política = Centro (CNF 64% = 80% x 80%)
+    aceita líder sem freios = Não, defende imprensa livre = Sim,
+    cumpre decisões da Justiça = Sim
+        -> Regra 52: perfil institucional = Democrático (CNF 100%)
+
+  Exemplo B
+    Respostas: Conduzir a economia / Privatizar a maioria / Manter o
+    equilíbrio / Manter os programas / Preservar os valores tradicionais /
+    Estado totalmente laico / Equilíbrio / Manter a legislação / Sim / Não /
+    Não
+        -> posição política = Centro (CNF 81% = 90% x 90%)
+        -> perfil institucional = Autoritário (CNF 100%)

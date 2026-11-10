@@ -95,7 +95,7 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);paddin
   <header>
     <div>
       <h1>Bússola Política</h1>
-      <p class="sub">Sistema especialista de posicionamento político construído no Expert SINTA. Esta página executa as mesmas 23 regras do arquivo <code>BUSSOLA_POLITICA.BCM</code>.</p>
+      <p class="sub">Sistema especialista de posicionamento político construído no Expert SINTA. Esta página executa as mesmas <span id="nrules"></span> regras do arquivo <code>BUSSOLA_POLITICA.BCM</code>.</p>
     </div>
     <nav aria-label="Vistas">
       <a href="#consulta" id="nav-consulta">Consulta</a>
@@ -149,7 +149,7 @@ const answers = {};
 let pick = null;
 
 // Encadeamento para trás, como no Expert SINTA: variável univalorada para na primeira regra aceita.
-// CNF da conclusão = menor CNF das premissas x CNF da regra; regra só é aceita com CNF >= 50.
+// CNF da conclusão = produto das CNFs das premissas x CNF da regra; regra só é aceita com CNF >= 50.
 function consult() {
   const facts = {}, fired = [];
   for (const k in answers) facts[k] = { val: answers[k], cnf: 100 };
@@ -165,9 +165,9 @@ function consult() {
         trying = i;
         const f = ev(pv);
         if (!f || (f.val === val) !== (op === "=")) { ok = false; break; }
-        cnf = Math.min(cnf, f.cnf);
+        cnf = cnf * f.cnf / 100;
       }
-      const c = cnf * r.cnf / 100;
+      const c = Math.round(cnf * r.cnf) / 100;
       if (ok && c >= 50) { fired.push(i); return facts[name] = { val: r.concl[1], cnf: c, rule: i }; }
     }
     return facts[name] = null;
@@ -213,9 +213,9 @@ function render() {
   } else {
     ask.innerHTML = `
       <div class="card" style="border:0;padding:0">
-        <div class="step">Consulta concluída · ${QUESTIONS.length} respostas</div>
+        <div class="step">Consulta concluída · ${n} respostas</div>
         <p class="q">Suas respostas</p>
-        <div>${QUESTIONS.map(v => `<div class="var"><span class="vals">${esc(v.question)}</span><span class="n">${esc(answers[v.name])}</span></div>`).join("")}</div>
+        <div>${QUESTIONS.filter(v => v.name in answers).map(v => `<div class="var"><span class="vals">${esc(v.question)}</span><span class="n">${esc(answers[v.name])}</span></div>`).join("")}</div>
         <div class="row"><button class="primary" id="btn-reset">Nova consulta</button></div>
       </div>`;
     document.getElementById("btn-reset").onclick = reset;
@@ -227,7 +227,7 @@ function render() {
       ? `<span class="val">${esc(f.val)}</span><div class="bar"><i style="width:${f.cnf}%"></i></div><span class="cnf">CNF ${f.cnf}% · Regra ${f.rule + 1}</span>`
       : `<span class="val pending">aguardando respostas</span>`) + `</div>`;
   }).join("") + (KB.goals.some(g => s.facts[g] && s.facts[g].cnf < 100)
-      ? `<p class="note">CNF abaixo de 100%: as respostas de um dos eixos apontam para lados opostos, e o sistema concluiu o valor central com menos confiança.</p>` : "");
+      ? `<p class="note">CNF abaixo de 100%: em algum tema ou eixo as respostas apontam para lados opostos. O sistema conclui o valor central com menos confiança (90% no tema, 80% no eixo) e multiplica as confianças ao encadear as regras.</p>` : "");
 
   const eco = byName["eixo econômico"].values, cos = byName["eixo de costumes"].values;
   const fe = s.facts["eixo econômico"], fc = s.facts["eixo de costumes"];
@@ -262,6 +262,7 @@ function route() {
   }
 }
 window.addEventListener("hashchange", route);
+document.getElementById("nrules").textContent = KB.rules.length;
 route(); render();
 </script>
 </body>

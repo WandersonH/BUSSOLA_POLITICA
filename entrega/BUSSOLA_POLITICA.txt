@@ -4,13 +4,15 @@ SOBRE O SISTEMA ESPECIALISTA
   -- Autores: Wanderson Honorio Roberto da Silva
   -- Resumo:
      Sistema especialista que identifica o posicionamento político-ideológico
-     do usuário a partir de seis perguntas sobre economia, costumes e
+     do usuário a partir de onze perguntas sobre economia, costumes e
      instituições.
      
-     O sistema usa dois eixos: o eixo econômico (esquerda, centro, direita)
-     e o eixo de costumes (progressista, moderado, conservador). A combinação
-     dos dois eixos define a posição política. Um segundo objetivo indica o
-     perfil institucional (democrático, ambivalente ou autoritário).
+     Cada par de perguntas define um tema (intervenção estatal, redistribuição
+     de renda, valores sociais, lei e ordem). Os temas formam dois eixos: o
+     eixo econômico (esquerda, centro, direita) e o eixo de costumes
+     (progressista, moderado, conservador). A combinação dos eixos define a
+     posição política. Um segundo objetivo indica o perfil institucional
+     (democrático, ambivalente ou autoritário).
      
      Finalidade exclusivamente didática: o resultado é uma classificação
      simplificada e não um juízo de valor sobre qualquer posição.
@@ -26,6 +28,9 @@ SOBRE OS ARQUIVOS
 VARIÁVEIS
 
   aceita líder sem freios
+    Tipo:
+      univalorada
+  cumpre decisões da Justiça
     Tipo:
       univalorada
   defende imprensa livre
@@ -45,6 +50,13 @@ VARIÁVEIS
       Direita
     Tipo:
       univalorada
+  empresas estatais
+    Valores:
+      Manter e fortalecer as estatais
+      Privatizar apenas as que dão prejuízo
+      Privatizar a maioria das estatais
+    Tipo:
+      univalorada
   impostos e serviços
     Valores:
       Mais impostos e mais serviços públicos
@@ -52,9 +64,30 @@ VARIÁVEIS
       Menos impostos e menos serviços públicos
     Tipo:
       univalorada
+  intervenção estatal
+    Valores:
+      Alta
+      Moderada
+      Baixa
+    Tipo:
+      univalorada
+  lei e ordem
+    Valores:
+      Garantista
+      Equilibrada
+      Punitivista
+    Tipo:
+      univalorada
+  mudanças nos costumes
+    Valores:
+      Acolher as mudanças e ampliar direitos
+      Mudar aos poucos, com cautela
+      Preservar os valores tradicionais
+    Tipo:
+      univalorada
   papel do Estado
     Valores:
-      Conduzir a economia e manter empresas estatais
+      Conduzir a economia e planejar o desenvolvimento
       Regular o mercado e corrigir desigualdades
       Interferir o mínimo possível
     Tipo:
@@ -64,6 +97,13 @@ VARIÁVEIS
       Democrático
       Ambivalente
       Autoritário
+    Tipo:
+      univalorada
+  política de drogas
+    Valores:
+      Tratar como saúde pública e descriminalizar
+      Manter a legislação atual
+      Endurecer as leis e a punição
     Tipo:
       univalorada
   posição política
@@ -77,6 +117,27 @@ VARIÁVEIS
       Direita
     Tipo:
       univalorada
+  programas sociais
+    Valores:
+      Ampliar os programas
+      Manter os programas no nível atual
+      Reduzir os programas
+    Tipo:
+      univalorada
+  redistribuição de renda
+    Valores:
+      Ampla
+      Moderada
+      Restrita
+    Tipo:
+      univalorada
+  religião e leis
+    Valores:
+      Nenhuma: o Estado deve ser totalmente laico
+      Alguma, como um dos valores da sociedade
+      Grande: as leis devem refletir valores religiosos
+    Tipo:
+      univalorada
   segurança pública
     Valores:
       Prevenção e políticas sociais
@@ -84,11 +145,11 @@ VARIÁVEIS
       Penas mais duras e mais policiamento
     Tipo:
       univalorada
-  valores e costumes
+  valores sociais
     Valores:
-      Acolher as mudanças e ampliar direitos
-      Mudar aos poucos, com cautela
-      Preservar os valores tradicionais
+      Liberais
+      Moderados
+      Tradicionais
     Tipo:
       univalorada
 
@@ -100,132 +161,332 @@ OBJETIVOS
 REGRAS
 
   Regra 1
-    SE papel do Estado = Conduzir a economia e manter empresas estatais
-    E  impostos e serviços <> Menos impostos e menos serviços públicos
-    ENTÃO eixo econômico = Esquerda CNF 100%
+    SE papel do Estado = Conduzir a economia e planejar o desenvolvimento
+    E  empresas estatais <> Privatizar a maioria das estatais
+    ENTÃO intervenção estatal = Alta CNF 100%
 
   Regra 2
-    SE papel do Estado = Interferir o mínimo possível
-    E  impostos e serviços <> Mais impostos e mais serviços públicos
-    ENTÃO eixo econômico = Direita CNF 100%
+    SE papel do Estado = Regular o mercado e corrigir desigualdades
+    E  empresas estatais = Manter e fortalecer as estatais
+    ENTÃO intervenção estatal = Alta CNF 100%
 
   Regra 3
-    SE papel do Estado = Regular o mercado e corrigir desigualdades
-    ENTÃO eixo econômico = Centro CNF 100%
+    SE papel do Estado = Interferir o mínimo possível
+    E  empresas estatais <> Manter e fortalecer as estatais
+    ENTÃO intervenção estatal = Baixa CNF 100%
 
   Regra 4
-    SE papel do Estado = Conduzir a economia e manter empresas estatais
-    E  impostos e serviços = Menos impostos e menos serviços públicos
-    ENTÃO eixo econômico = Centro CNF 80%
+    SE papel do Estado = Regular o mercado e corrigir desigualdades
+    E  empresas estatais = Privatizar a maioria das estatais
+    ENTÃO intervenção estatal = Baixa CNF 100%
 
   Regra 5
-    SE papel do Estado = Interferir o mínimo possível
-    E  impostos e serviços = Mais impostos e mais serviços públicos
-    ENTÃO eixo econômico = Centro CNF 80%
+    SE papel do Estado = Regular o mercado e corrigir desigualdades
+    E  empresas estatais = Privatizar apenas as que dão prejuízo
+    ENTÃO intervenção estatal = Moderada CNF 100%
 
   Regra 6
-    SE valores e costumes = Acolher as mudanças e ampliar direitos
-    E  segurança pública <> Penas mais duras e mais policiamento
-    ENTÃO eixo de costumes = Progressista CNF 100%
+    SE papel do Estado = Conduzir a economia e planejar o desenvolvimento
+    E  empresas estatais = Privatizar a maioria das estatais
+    ENTÃO intervenção estatal = Moderada CNF 90%
 
   Regra 7
-    SE valores e costumes = Preservar os valores tradicionais
-    E  segurança pública <> Prevenção e políticas sociais
-    ENTÃO eixo de costumes = Conservador CNF 100%
+    SE papel do Estado = Interferir o mínimo possível
+    E  empresas estatais = Manter e fortalecer as estatais
+    ENTÃO intervenção estatal = Moderada CNF 90%
 
   Regra 8
-    SE valores e costumes = Mudar aos poucos, com cautela
-    ENTÃO eixo de costumes = Moderado CNF 100%
+    SE impostos e serviços = Mais impostos e mais serviços públicos
+    E  programas sociais <> Reduzir os programas
+    ENTÃO redistribuição de renda = Ampla CNF 100%
 
   Regra 9
-    SE valores e costumes = Acolher as mudanças e ampliar direitos
-    E  segurança pública = Penas mais duras e mais policiamento
-    ENTÃO eixo de costumes = Moderado CNF 80%
+    SE impostos e serviços = Manter o equilíbrio atual
+    E  programas sociais = Ampliar os programas
+    ENTÃO redistribuição de renda = Ampla CNF 100%
 
   Regra 10
-    SE valores e costumes = Preservar os valores tradicionais
-    E  segurança pública = Prevenção e políticas sociais
-    ENTÃO eixo de costumes = Moderado CNF 80%
+    SE impostos e serviços = Menos impostos e menos serviços públicos
+    E  programas sociais <> Ampliar os programas
+    ENTÃO redistribuição de renda = Restrita CNF 100%
 
   Regra 11
+    SE impostos e serviços = Manter o equilíbrio atual
+    E  programas sociais = Reduzir os programas
+    ENTÃO redistribuição de renda = Restrita CNF 100%
+
+  Regra 12
+    SE impostos e serviços = Manter o equilíbrio atual
+    E  programas sociais = Manter os programas no nível atual
+    ENTÃO redistribuição de renda = Moderada CNF 100%
+
+  Regra 13
+    SE impostos e serviços = Mais impostos e mais serviços públicos
+    E  programas sociais = Reduzir os programas
+    ENTÃO redistribuição de renda = Moderada CNF 90%
+
+  Regra 14
+    SE impostos e serviços = Menos impostos e menos serviços públicos
+    E  programas sociais = Ampliar os programas
+    ENTÃO redistribuição de renda = Moderada CNF 90%
+
+  Regra 15
+    SE intervenção estatal = Alta
+    E  redistribuição de renda <> Restrita
+    ENTÃO eixo econômico = Esquerda CNF 100%
+
+  Regra 16
+    SE intervenção estatal = Moderada
+    E  redistribuição de renda = Ampla
+    ENTÃO eixo econômico = Esquerda CNF 100%
+
+  Regra 17
+    SE intervenção estatal = Baixa
+    E  redistribuição de renda <> Ampla
+    ENTÃO eixo econômico = Direita CNF 100%
+
+  Regra 18
+    SE intervenção estatal = Moderada
+    E  redistribuição de renda = Restrita
+    ENTÃO eixo econômico = Direita CNF 100%
+
+  Regra 19
+    SE intervenção estatal = Moderada
+    E  redistribuição de renda = Moderada
+    ENTÃO eixo econômico = Centro CNF 100%
+
+  Regra 20
+    SE intervenção estatal = Alta
+    E  redistribuição de renda = Restrita
+    ENTÃO eixo econômico = Centro CNF 80%
+
+  Regra 21
+    SE intervenção estatal = Baixa
+    E  redistribuição de renda = Ampla
+    ENTÃO eixo econômico = Centro CNF 80%
+
+  Regra 22
+    SE mudanças nos costumes = Acolher as mudanças e ampliar direitos
+    E  religião e leis <> Grande: as leis devem refletir valores religiosos
+    ENTÃO valores sociais = Liberais CNF 100%
+
+  Regra 23
+    SE mudanças nos costumes = Mudar aos poucos, com cautela
+    E  religião e leis = Nenhuma: o Estado deve ser totalmente laico
+    ENTÃO valores sociais = Liberais CNF 100%
+
+  Regra 24
+    SE mudanças nos costumes = Preservar os valores tradicionais
+    E  religião e leis <> Nenhuma: o Estado deve ser totalmente laico
+    ENTÃO valores sociais = Tradicionais CNF 100%
+
+  Regra 25
+    SE mudanças nos costumes = Mudar aos poucos, com cautela
+    E  religião e leis = Grande: as leis devem refletir valores religiosos
+    ENTÃO valores sociais = Tradicionais CNF 100%
+
+  Regra 26
+    SE mudanças nos costumes = Mudar aos poucos, com cautela
+    E  religião e leis = Alguma, como um dos valores da sociedade
+    ENTÃO valores sociais = Moderados CNF 100%
+
+  Regra 27
+    SE mudanças nos costumes = Acolher as mudanças e ampliar direitos
+    E  religião e leis = Grande: as leis devem refletir valores religiosos
+    ENTÃO valores sociais = Moderados CNF 90%
+
+  Regra 28
+    SE mudanças nos costumes = Preservar os valores tradicionais
+    E  religião e leis = Nenhuma: o Estado deve ser totalmente laico
+    ENTÃO valores sociais = Moderados CNF 90%
+
+  Regra 29
+    SE segurança pública = Prevenção e políticas sociais
+    E  política de drogas <> Endurecer as leis e a punição
+    ENTÃO lei e ordem = Garantista CNF 100%
+
+  Regra 30
+    SE segurança pública = Equilíbrio entre prevenção e punição
+    E  política de drogas = Tratar como saúde pública e descriminalizar
+    ENTÃO lei e ordem = Garantista CNF 100%
+
+  Regra 31
+    SE segurança pública = Penas mais duras e mais policiamento
+    E  política de drogas <> Tratar como saúde pública e descriminalizar
+    ENTÃO lei e ordem = Punitivista CNF 100%
+
+  Regra 32
+    SE segurança pública = Equilíbrio entre prevenção e punição
+    E  política de drogas = Endurecer as leis e a punição
+    ENTÃO lei e ordem = Punitivista CNF 100%
+
+  Regra 33
+    SE segurança pública = Equilíbrio entre prevenção e punição
+    E  política de drogas = Manter a legislação atual
+    ENTÃO lei e ordem = Equilibrada CNF 100%
+
+  Regra 34
+    SE segurança pública = Prevenção e políticas sociais
+    E  política de drogas = Endurecer as leis e a punição
+    ENTÃO lei e ordem = Equilibrada CNF 90%
+
+  Regra 35
+    SE segurança pública = Penas mais duras e mais policiamento
+    E  política de drogas = Tratar como saúde pública e descriminalizar
+    ENTÃO lei e ordem = Equilibrada CNF 90%
+
+  Regra 36
+    SE valores sociais = Liberais
+    E  lei e ordem <> Punitivista
+    ENTÃO eixo de costumes = Progressista CNF 100%
+
+  Regra 37
+    SE valores sociais = Moderados
+    E  lei e ordem = Garantista
+    ENTÃO eixo de costumes = Progressista CNF 100%
+
+  Regra 38
+    SE valores sociais = Tradicionais
+    E  lei e ordem <> Garantista
+    ENTÃO eixo de costumes = Conservador CNF 100%
+
+  Regra 39
+    SE valores sociais = Moderados
+    E  lei e ordem = Punitivista
+    ENTÃO eixo de costumes = Conservador CNF 100%
+
+  Regra 40
+    SE valores sociais = Moderados
+    E  lei e ordem = Equilibrada
+    ENTÃO eixo de costumes = Moderado CNF 100%
+
+  Regra 41
+    SE valores sociais = Liberais
+    E  lei e ordem = Punitivista
+    ENTÃO eixo de costumes = Moderado CNF 80%
+
+  Regra 42
+    SE valores sociais = Tradicionais
+    E  lei e ordem = Garantista
+    ENTÃO eixo de costumes = Moderado CNF 80%
+
+  Regra 43
     SE eixo econômico = Esquerda
     E  eixo de costumes = Progressista
     ENTÃO posição política = Esquerda CNF 100%
 
-  Regra 12
+  Regra 44
     SE eixo econômico = Esquerda
     E  eixo de costumes = Moderado
     ENTÃO posição política = Centro-esquerda CNF 100%
 
-  Regra 13
+  Regra 45
     SE eixo econômico = Esquerda
     E  eixo de costumes = Conservador
     ENTÃO posição política = Esquerda conservadora nos costumes CNF 100%
 
-  Regra 14
+  Regra 46
     SE eixo econômico = Centro
     E  eixo de costumes = Progressista
     ENTÃO posição política = Centro-esquerda CNF 100%
 
-  Regra 15
+  Regra 47
     SE eixo econômico = Centro
     E  eixo de costumes = Moderado
     ENTÃO posição política = Centro CNF 100%
 
-  Regra 16
+  Regra 48
     SE eixo econômico = Centro
     E  eixo de costumes = Conservador
     ENTÃO posição política = Centro-direita CNF 100%
 
-  Regra 17
+  Regra 49
     SE eixo econômico = Direita
     E  eixo de costumes = Progressista
     ENTÃO posição política = Liberal (economia e costumes) CNF 100%
 
-  Regra 18
+  Regra 50
     SE eixo econômico = Direita
     E  eixo de costumes = Moderado
     ENTÃO posição política = Centro-direita CNF 100%
 
-  Regra 19
+  Regra 51
     SE eixo econômico = Direita
     E  eixo de costumes = Conservador
     ENTÃO posição política = Direita CNF 100%
 
-  Regra 20
+  Regra 52
     SE aceita líder sem freios = Não
     E  defende imprensa livre = Sim
+    E  cumpre decisões da Justiça = Sim
     ENTÃO perfil institucional = Democrático CNF 100%
 
-  Regra 21
-    SE aceita líder sem freios = Sim
-    E  defende imprensa livre = Não
-    ENTÃO perfil institucional = Autoritário CNF 100%
-
-  Regra 22
-    SE aceita líder sem freios = Sim
+  Regra 53
+    SE aceita líder sem freios = Não
     E  defende imprensa livre = Sim
+    E  cumpre decisões da Justiça = Não
     ENTÃO perfil institucional = Ambivalente CNF 100%
 
-  Regra 23
+  Regra 54
     SE aceita líder sem freios = Não
     E  defende imprensa livre = Não
+    E  cumpre decisões da Justiça = Sim
     ENTÃO perfil institucional = Ambivalente CNF 100%
+
+  Regra 55
+    SE aceita líder sem freios = Não
+    E  defende imprensa livre = Não
+    E  cumpre decisões da Justiça = Não
+    ENTÃO perfil institucional = Ambivalente CNF 100%
+
+  Regra 56
+    SE aceita líder sem freios = Sim
+    E  defende imprensa livre = Sim
+    E  cumpre decisões da Justiça = Sim
+    ENTÃO perfil institucional = Ambivalente CNF 100%
+
+  Regra 57
+    SE aceita líder sem freios = Sim
+    E  defende imprensa livre = Sim
+    E  cumpre decisões da Justiça = Não
+    ENTÃO perfil institucional = Ambivalente CNF 100%
+
+  Regra 58
+    SE aceita líder sem freios = Sim
+    E  defende imprensa livre = Não
+    E  cumpre decisões da Justiça = Sim
+    ENTÃO perfil institucional = Ambivalente CNF 100%
+
+  Regra 59
+    SE aceita líder sem freios = Sim
+    E  defende imprensa livre = Não
+    E  cumpre decisões da Justiça = Não
+    ENTÃO perfil institucional = Autoritário CNF 100%
 
 PERGUNTAS
 
   Variável:aceita líder sem freios
      Pergunta:"Você aceitaria um líder forte que governasse sem depender do Congresso e do Judiciário?"
+  Variável:cumpre decisões da Justiça
+     Pergunta:"Um governo deve cumprir as decisões da Justiça mesmo quando discorda delas?"
   Variável:defende imprensa livre
      Pergunta:"A imprensa deve ser livre para criticar o governo, mesmo quando erra?"
+  Variável:empresas estatais
+     Pergunta:"O que o governo deve fazer com as empresas estatais?"
   Variável:impostos e serviços
      Pergunta:"Entre impostos e serviços públicos, qual combinação você prefere?"
+  Variável:mudanças nos costumes
+     Pergunta:"Diante de mudanças nos costumes (família, comportamento, identidade), o que a sociedade deve fazer?"
   Variável:papel do Estado
      Pergunta:"Na sua opinião, qual deve ser o papel do Estado na economia?"
+  Variável:política de drogas
+     Pergunta:"Como o Estado deve tratar o uso de drogas?"
+  Variável:programas sociais
+     Pergunta:"O que fazer com os programas de transferência de renda?"
+  Variável:religião e leis
+     Pergunta:"Qual deve ser a influência da religião sobre as leis?"
   Variável:segurança pública
      Pergunta:"Qual deve ser a prioridade no combate à criminalidade?"
-  Variável:valores e costumes
-     Pergunta:"Diante de mudanças nos costumes (família, comportamento, identidade), o que a sociedade deve fazer?"
 
 --------------------------------------------------------------------------------
 Gerado com o Expert SINTA versão 1.1b

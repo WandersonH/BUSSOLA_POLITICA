@@ -12,14 +12,14 @@ Sistema especialista de pergunta e resposta que classifica o posicionamento pol�
 
 ## Como o sistema raciocina
 
-- 6 perguntas: 4 de múltipla escolha e 2 de Sim/Não.
-- 10 variáveis univaloradas: 6 perguntadas, 2 intermediárias (eixo econômico, eixo de costumes) e 2 objetivos (posição política, perfil institucional).
-- 23 regras: 5 para cada eixo, 9 que combinam os eixos e 4 para o perfil institucional.
-- Regras de respostas mistas concluem o valor central do eixo com CNF 80%.
+- 11 perguntas: 8 de múltipla escolha e 3 de Sim/Não. Todas são sempre feitas.
+- 19 variáveis univaloradas: 11 perguntadas, 4 de tema (intervenção estatal, redistribuição de renda, valores sociais, lei e ordem), 2 de eixo (eixo econômico, eixo de costumes) e 2 objetivos (posição política, perfil institucional).
+- 59 regras: 7 para cada tema e cada eixo (42), 9 que combinam os eixos e 8 para o perfil institucional.
+- Respostas em polos opostos concluem o valor central com CNF 90% (tema) ou 80% (eixo); o SINTA multiplica as confianças ao encadear.
 
 ## Visualizador
 
-`index.html` executa as mesmas 23 regras no navegador, com encadeamento para trás, botão "Por quê?" e histórico de regras, como na consulta do SINTA. Basta abrir o arquivo.
+`index.html` executa as mesmas 59 regras no navegador, com encadeamento para trás, botão "Por quê?" e histórico de regras, como na consulta do SINTA. Basta abrir o arquivo.
 
 ## Como abrir no Expert SINTA
 
@@ -29,9 +29,9 @@ Abra o `ExSINTA.exe` (Windows, ou Wine no Mac/Linux), menu Arquivo / Abrir base,
 
 - `spec.py`: a base de conhecimento (variáveis, perguntas, regras). Fonte única.
 - `gen_bcm.py`: grava o `.BCM` no formato binário do Expert SINTA. Uso: `python3 gen_bcm.py saida.BCM`.
-- `engine.py`: motor de referência em Python, usado para conferir as 324 combinações de respostas.
+- `engine.py`: motor de referência em Python, usado para conferir as 52.488 combinações de respostas.
 - `build_web.py` e `web_template.html`: geram o `index.html`.
 
-O `.BCM` foi gerado por script e validado no Expert SINTA 1.1b: a base abre, a consulta roda e o `.txt` da entrega foi exportado pelo próprio SINTA.
+O `.BCM` foi gerado por script e validado no Expert SINTA 1.1b: a base abre, duas consultas completas deram o resultado previsto e o `.txt` da entrega foi exportado pelo próprio SINTA.
 
 Finalidade didática: a classificação é simplificada e não é juízo de valor sobre nenhuma posição.
