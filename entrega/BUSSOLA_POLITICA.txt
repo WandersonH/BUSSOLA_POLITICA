@@ -1,0 +1,235 @@
+--------------------------------------------------------------------------------
+SOBRE O SISTEMA ESPECIALISTA
+  -- Nome:    Bússola Política - Sistema Especialista de Posicionamento Político
+  -- Autores: Wanderson Honorio Roberto da Silva
+  -- Resumo:
+     Sistema especialista que identifica o posicionamento político-ideológico
+     do usuário a partir de seis perguntas sobre economia, costumes e
+     instituições.
+     
+     O sistema usa dois eixos: o eixo econômico (esquerda, centro, direita)
+     e o eixo de costumes (progressista, moderado, conservador). A combinação
+     dos dois eixos define a posição política. Um segundo objetivo indica o
+     perfil institucional (democrático, ambivalente ou autoritário).
+     
+     Finalidade exclusivamente didática: o resultado é uma classificação
+     simplificada e não um juízo de valor sobre qualquer posição.
+
+Operador de maior precedência: conjunção
+Fator de confiança mínimo para aceitação de regra: 50
+
+SOBRE OS ARQUIVOS
+  Arquivo original: C:\SINTA\BUSSOLA_POLITICA.BCM
+  O sistema não possui recursos de ajuda.
+--------------------------------------------------------------------------------
+
+VARIÁVEIS
+
+  aceita líder sem freios
+    Tipo:
+      univalorada
+  defende imprensa livre
+    Tipo:
+      univalorada
+  eixo de costumes
+    Valores:
+      Progressista
+      Moderado
+      Conservador
+    Tipo:
+      univalorada
+  eixo econômico
+    Valores:
+      Esquerda
+      Centro
+      Direita
+    Tipo:
+      univalorada
+  impostos e serviços
+    Valores:
+      Mais impostos e mais serviços públicos
+      Manter o equilíbrio atual
+      Menos impostos e menos serviços públicos
+    Tipo:
+      univalorada
+  papel do Estado
+    Valores:
+      Conduzir a economia e manter empresas estatais
+      Regular o mercado e corrigir desigualdades
+      Interferir o mínimo possível
+    Tipo:
+      univalorada
+  perfil institucional
+    Valores:
+      Democrático
+      Ambivalente
+      Autoritário
+    Tipo:
+      univalorada
+  posição política
+    Valores:
+      Esquerda
+      Centro-esquerda
+      Esquerda conservadora nos costumes
+      Centro
+      Centro-direita
+      Liberal (economia e costumes)
+      Direita
+    Tipo:
+      univalorada
+  segurança pública
+    Valores:
+      Prevenção e políticas sociais
+      Equilíbrio entre prevenção e punição
+      Penas mais duras e mais policiamento
+    Tipo:
+      univalorada
+  valores e costumes
+    Valores:
+      Acolher as mudanças e ampliar direitos
+      Mudar aos poucos, com cautela
+      Preservar os valores tradicionais
+    Tipo:
+      univalorada
+
+OBJETIVOS
+
+  posição política
+  perfil institucional
+
+REGRAS
+
+  Regra 1
+    SE papel do Estado = Conduzir a economia e manter empresas estatais
+    E  impostos e serviços <> Menos impostos e menos serviços públicos
+    ENTÃO eixo econômico = Esquerda CNF 100%
+
+  Regra 2
+    SE papel do Estado = Interferir o mínimo possível
+    E  impostos e serviços <> Mais impostos e mais serviços públicos
+    ENTÃO eixo econômico = Direita CNF 100%
+
+  Regra 3
+    SE papel do Estado = Regular o mercado e corrigir desigualdades
+    ENTÃO eixo econômico = Centro CNF 100%
+
+  Regra 4
+    SE papel do Estado = Conduzir a economia e manter empresas estatais
+    E  impostos e serviços = Menos impostos e menos serviços públicos
+    ENTÃO eixo econômico = Centro CNF 80%
+
+  Regra 5
+    SE papel do Estado = Interferir o mínimo possível
+    E  impostos e serviços = Mais impostos e mais serviços públicos
+    ENTÃO eixo econômico = Centro CNF 80%
+
+  Regra 6
+    SE valores e costumes = Acolher as mudanças e ampliar direitos
+    E  segurança pública <> Penas mais duras e mais policiamento
+    ENTÃO eixo de costumes = Progressista CNF 100%
+
+  Regra 7
+    SE valores e costumes = Preservar os valores tradicionais
+    E  segurança pública <> Prevenção e políticas sociais
+    ENTÃO eixo de costumes = Conservador CNF 100%
+
+  Regra 8
+    SE valores e costumes = Mudar aos poucos, com cautela
+    ENTÃO eixo de costumes = Moderado CNF 100%
+
+  Regra 9
+    SE valores e costumes = Acolher as mudanças e ampliar direitos
+    E  segurança pública = Penas mais duras e mais policiamento
+    ENTÃO eixo de costumes = Moderado CNF 80%
+
+  Regra 10
+    SE valores e costumes = Preservar os valores tradicionais
+    E  segurança pública = Prevenção e políticas sociais
+    ENTÃO eixo de costumes = Moderado CNF 80%
+
+  Regra 11
+    SE eixo econômico = Esquerda
+    E  eixo de costumes = Progressista
+    ENTÃO posição política = Esquerda CNF 100%
+
+  Regra 12
+    SE eixo econômico = Esquerda
+    E  eixo de costumes = Moderado
+    ENTÃO posição política = Centro-esquerda CNF 100%
+
+  Regra 13
+    SE eixo econômico = Esquerda
+    E  eixo de costumes = Conservador
+    ENTÃO posição política = Esquerda conservadora nos costumes CNF 100%
+
+  Regra 14
+    SE eixo econômico = Centro
+    E  eixo de costumes = Progressista
+    ENTÃO posição política = Centro-esquerda CNF 100%
+
+  Regra 15
+    SE eixo econômico = Centro
+    E  eixo de costumes = Moderado
+    ENTÃO posição política = Centro CNF 100%
+
+  Regra 16
+    SE eixo econômico = Centro
+    E  eixo de costumes = Conservador
+    ENTÃO posição política = Centro-direita CNF 100%
+
+  Regra 17
+    SE eixo econômico = Direita
+    E  eixo de costumes = Progressista
+    ENTÃO posição política = Liberal (economia e costumes) CNF 100%
+
+  Regra 18
+    SE eixo econômico = Direita
+    E  eixo de costumes = Moderado
+    ENTÃO posição política = Centro-direita CNF 100%
+
+  Regra 19
+    SE eixo econômico = Direita
+    E  eixo de costumes = Conservador
+    ENTÃO posição política = Direita CNF 100%
+
+  Regra 20
+    SE aceita líder sem freios = Não
+    E  defende imprensa livre = Sim
+    ENTÃO perfil institucional = Democrático CNF 100%
+
+  Regra 21
+    SE aceita líder sem freios = Sim
+    E  defende imprensa livre = Não
+    ENTÃO perfil institucional = Autoritário CNF 100%
+
+  Regra 22
+    SE aceita líder sem freios = Sim
+    E  defende imprensa livre = Sim
+    ENTÃO perfil institucional = Ambivalente CNF 100%
+
+  Regra 23
+    SE aceita líder sem freios = Não
+    E  defende imprensa livre = Não
+    ENTÃO perfil institucional = Ambivalente CNF 100%
+
+PERGUNTAS
+
+  Variável:aceita líder sem freios
+     Pergunta:"Você aceitaria um líder forte que governasse sem depender do Congresso e do Judiciário?"
+  Variável:defende imprensa livre
+     Pergunta:"A imprensa deve ser livre para criticar o governo, mesmo quando erra?"
+  Variável:impostos e serviços
+     Pergunta:"Entre impostos e serviços públicos, qual combinação você prefere?"
+  Variável:papel do Estado
+     Pergunta:"Na sua opinião, qual deve ser o papel do Estado na economia?"
+  Variável:segurança pública
+     Pergunta:"Qual deve ser a prioridade no combate à criminalidade?"
+  Variável:valores e costumes
+     Pergunta:"Diante de mudanças nos costumes (família, comportamento, identidade), o que a sociedade deve fazer?"
+
+--------------------------------------------------------------------------------
+Gerado com o Expert SINTA versão 1.1b
+(c) 1997 - Universidade Federal do Ceará
+           Laboratório de Inteligência Artificial
+           LIA/UFC
+--------------------------------------------------------------------------------

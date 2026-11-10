@@ -1,0 +1,102 @@
+INTELIGÊNCIA ARTIFICIAL - TRABALHO EXPERT SINTA
+Profa. Dra. Jaqueline Brigladori Pugliesi
+
+Sistema: Bússola Política - Sistema Especialista de Posicionamento Político
+Autor:   Wanderson Honorio Roberto da Silva
+Arquivos entregues:
+  - DOMINIO_E_OBJETIVOS.txt   (este arquivo)
+  - BUSSOLA_POLITICA.BCM      (base de conhecimento do Expert SINTA)
+  - BUSSOLA_POLITICA.txt      (base exportada em Arquivo / Exportar / Base de Conhecimento...)
+
+
+1. DOMÍNIO DE CONHECIMENTO
+
+Classificação do posicionamento político-ideológico de uma pessoa a partir
+de suas opiniões declaradas.
+
+O conhecimento modelado vem da forma usual de descrever posições políticas
+em dois eixos independentes, em vez de uma única linha esquerda-direita:
+
+  - Eixo econômico: quanto o Estado deve atuar na economia e qual o tamanho
+    desejado da carga de impostos e dos serviços públicos.
+    Valores: Esquerda, Centro, Direita.
+
+  - Eixo de costumes: como a sociedade deve reagir a mudanças de valores e
+    qual a prioridade no combate à criminalidade.
+    Valores: Progressista, Moderado, Conservador.
+
+Um terceiro aspecto, tratado à parte, é a relação com as instituições
+democráticas (freios e contrapesos e liberdade de imprensa).
+
+O sistema tem finalidade didática. A classificação é simplificada e não
+representa juízo de valor sobre nenhuma posição.
+
+
+2. OBJETIVOS DO SISTEMA
+
+O sistema possui duas variáveis-objetivo:
+
+  a) posição política
+     Esquerda | Centro-esquerda | Esquerda conservadora nos costumes |
+     Centro | Centro-direita | Liberal (economia e costumes) | Direita
+
+  b) perfil institucional
+     Democrático | Ambivalente | Autoritário
+
+Para chegar a elas, o sistema faz seis perguntas ao usuário e encadeia as
+regras para trás (do objetivo para as perguntas).
+
+
+3. ESTRUTURA DAS VARIÁVEIS (10 variáveis, todas univaloradas)
+
+  Variáveis perguntadas ao usuário (6):
+    papel do Estado ............ 3 alternativas
+    impostos e serviços ........ 3 alternativas
+    valores e costumes ......... 3 alternativas
+    segurança pública .......... 3 alternativas
+    aceita líder sem freios .... Sim / Não
+    defende imprensa livre ..... Sim / Não
+
+  Variáveis intermediárias, deduzidas pelas regras (2):
+    eixo econômico ............. Esquerda, Centro, Direita
+    eixo de costumes ........... Progressista, Moderado, Conservador
+
+  Variáveis-objetivo (2):
+    posição política
+    perfil institucional
+
+
+4. REGRAS (23 regras)
+
+  Regras  1 a  5: deduzem o eixo econômico a partir de "papel do Estado" e
+                  "impostos e serviços".
+  Regras  6 a 10: deduzem o eixo de costumes a partir de "valores e
+                  costumes" e "segurança pública".
+  Regras 11 a 19: combinam os dois eixos (3 x 3) e concluem a posição
+                  política.
+  Regras 20 a 23: concluem o perfil institucional a partir das duas
+                  perguntas de Sim / Não.
+
+  Toda combinação possível de respostas leva a uma conclusão: as 5 regras de
+  cada eixo cobrem as 9 combinações das duas perguntas, e as 9 regras de
+  posição cobrem as 9 combinações dos eixos.
+
+  Fatores de confiança: quando as duas respostas de um eixo apontam para
+  lados opostos (por exemplo, Estado condutor da economia com menos
+  impostos), o sistema conclui o valor central do eixo com CNF 80%. As
+  demais regras concluem com CNF 100%. O fator de confiança final da posição
+  política é o menor entre os dois eixos.
+
+
+5. EXEMPLO DE CONSULTA
+
+  papel do Estado     = Conduzir a economia e manter empresas estatais
+  impostos e serviços = Menos impostos e menos serviços públicos
+      -> Regra 4: eixo econômico = Centro (CNF 80%)
+  valores e costumes  = Acolher as mudanças e ampliar direitos
+  segurança pública   = Prevenção e políticas sociais
+      -> Regra 6: eixo de costumes = Progressista (CNF 100%)
+      -> Regra 14: posição política = Centro-esquerda (CNF 80%)
+  aceita líder sem freios = Não
+  defende imprensa livre  = Sim
+      -> Regra 20: perfil institucional = Democrático (CNF 100%)
